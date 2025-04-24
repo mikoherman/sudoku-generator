@@ -8,4 +8,6 @@ public interface IConsoleUserIOProcessor
     int PromptUserForNumber();
     Difficulty PromptUserForDifficulty();
     void DisplayDifficulties();
+    void DisplaySudokuGeneratingStatus();
+    void DisplayPdfProcessingStatus();
 }

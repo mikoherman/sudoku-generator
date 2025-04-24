@@ -1,4 +1,5 @@
-﻿using Sudoku_Generator.Utilities;
+﻿using Sudoku_Generator.UserInteraction;
+using Sudoku_Generator.Utilities;
 using SudokuGenerator.Models;
 
 namespace SudokuGenerator.UserInteraction;
@@ -6,19 +7,25 @@ namespace SudokuGenerator.UserInteraction;
 public class ConsoleUserIOProcessor : IConsoleUserIOProcessor
 {
     private readonly IConsoleUserInteractor _userInteractor;
+    private readonly ILoopingStatusPrinter _pdfProcessingStatusPrinter;
+    private readonly ILoopingStatusPrinter _sudokuGeneratingStatusPrinter;
     private readonly string _separator = Environment.NewLine;
-
-    public ConsoleUserIOProcessor(IConsoleUserInteractor userInteractor)
+    public ConsoleUserIOProcessor(IConsoleUserInteractor userInteractor, 
+        ILoopingStatusPrinter pdfProcessingStatusPrinter, 
+        ILoopingStatusPrinter sudokuGeneratingStatusPrinter)
     {
         _userInteractor = userInteractor;
+        _pdfProcessingStatusPrinter = pdfProcessingStatusPrinter;
+        _sudokuGeneratingStatusPrinter = sudokuGeneratingStatusPrinter;
     }
+
     public int PromptUserForNumber()
     {
         string? userInput;
         int number;
         do
         {
-            _userInteractor.ShowMessage($"Please input number of sudoku boards to generate:{_separator}");
+            _userInteractor.ShowMessage($"Please input number of sudoku boards to generate:");
             userInput = _userInteractor.Read();
         } while (string.IsNullOrEmpty(userInput) ||
         !int.TryParse(userInput, out number));
@@ -49,11 +56,15 @@ public class ConsoleUserIOProcessor : IConsoleUserIOProcessor
         Difficulty difficulty;
         do
         {
-            _userInteractor.ShowMessage($"Choose difficulty: {_separator}");
+            _userInteractor.ShowMessage($"Choose difficulty:");
             userInput = _userInteractor.Read();
         } while (string.IsNullOrEmpty(userInput) ||
         !int.TryParse(userInput, out int number) || 
         !DifficultyUtils.TryParse(number, out difficulty));
         return difficulty;
     }
+    public void DisplayPdfProcessingStatus() =>
+        _pdfProcessingStatusPrinter.PrintMessageUponCompletion("Generating Pdfs", "Pdfs have been generated");
+    public void DisplaySudokuGeneratingStatus() =>
+        _sudokuGeneratingStatusPrinter.PrintMessageUponCompletion("Generating Sudokus", "Sudokus have been generated");
 }
