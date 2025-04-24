@@ -60,7 +60,7 @@ public class ConsoleUserIOProcessor : IConsoleUserIOProcessor
     /// <summary>
     /// Displays the available difficulty levels to the user.
     /// </summary>
-    public void DisplayDifficulties()
+    private void DisplayDifficulties()
     {
         var allDifficultiesAsString = DifficultyUtils
             .GetAllDifficulties()
@@ -74,6 +74,7 @@ public class ConsoleUserIOProcessor : IConsoleUserIOProcessor
     /// <returns>The selected <see cref="Difficulty"/> level.</returns>
     public Difficulty PromptUserForDifficulty()
     {
+        DisplayDifficulties();
         string? userInput;
         Difficulty difficulty;
         do

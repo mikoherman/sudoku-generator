@@ -26,11 +26,6 @@ public interface IConsoleUserIOProcessor
     Difficulty PromptUserForDifficulty();
 
     /// <summary>
-    /// Displays the available difficulty levels to the user.
-    /// </summary>
-    void DisplayDifficulties();
-
-    /// <summary>
     /// Displays the status of the Sudoku generation operation.
     /// </summary>
     void DisplaySudokuGeneratingStatus();

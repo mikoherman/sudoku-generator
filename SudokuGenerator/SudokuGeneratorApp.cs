@@ -36,9 +36,9 @@ public class SudokuGeneratorApp
     public async Task Run(string solvableBoardsFileName, string solutionsFileName)
     {
         int numberOfSudokuBoards = _userIOProcessor.PromptUserForNumber();
-        _userIOProcessor.DisplayDifficulties();
         Difficulty sudokuDifficulty = _userIOProcessor.PromptUserForDifficulty();
-        ISudokuGenerator sudokuGenerator = _generatorFactory.CreateSudokuGeneratorFor(sudokuDifficulty);
+        ISudokuGenerator sudokuGenerator = _generatorFactory
+            .CreateSudokuGeneratorFor(sudokuDifficulty);
         _userIOProcessor.DisplaySudokuGeneratingStatus();
         IEnumerable<Sudoku> sudokuBoards = await sudokuGenerator
             .GenerateBoardsAsync(numberOfSudokuBoards);
