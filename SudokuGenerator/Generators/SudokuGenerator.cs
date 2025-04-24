@@ -1,10 +1,12 @@
-﻿using SudokuGenerator.Models;
+﻿using Sudoku_Generator.Events;
+using SudokuGenerator.Models;
 using SudokuGenerator.RemovalPatterns;
 
 namespace SudokuGenerator.Generators;
 
-public class SudokuGenerator : ISudokuGenerator
+public class SudokuGenerator : ISudokuGenerator, IProcessNotifier
 {
+    public event EventHandler<IsProcessFinishedEventArgs>? ProcessFinished;
     private readonly ISudokuBoardFiller _boardFiller;
     private readonly IList<IRemovalPattern> _removalPatterns;
     private readonly Random _rand;
@@ -17,7 +19,7 @@ public class SudokuGenerator : ISudokuGenerator
         _rand = rand;
     }
 
-    public async Task<IEnumerable<Sudoku>> GenerateBoards(int boardCount)
+    public async Task<IEnumerable<Sudoku>> GenerateBoardsAsync(int boardCount)
     {
         var tasks = new List<Task<Sudoku>>(boardCount);
         while (boardCount > 0)
@@ -30,6 +32,14 @@ public class SudokuGenerator : ISudokuGenerator
             }));
             boardCount--;
         }
-        return await Task.WhenAll(tasks);
+        return await (Task.WhenAll(tasks)).ContinueWith(task =>
+        {
+            OnProcessFinished();
+            return task.Result;
+        });
     }
+
+    private void OnProcessFinished() =>
+        ProcessFinished?.Invoke(this, 
+            new IsProcessFinishedEventArgs(true));
 }
