@@ -1,4 +1,6 @@
-﻿using Sudoku_Generator.Core.Models;
+﻿using System.Diagnostics.Metrics;
+using System.Reflection;
+using Sudoku_Generator.Core.Models;
 using Sudoku_Generator.Utilities;
 
 namespace Sudoku_Generator.UserInteraction;
@@ -12,7 +14,6 @@ public class ConsoleUserIOProcessor : IConsoleUserIOProcessor
     private readonly ILoopingStatusPrinter _pdfProcessingStatusPrinter;
     private readonly ILoopingStatusPrinter _sudokuGeneratingStatusPrinter;
     private readonly string _separator = Environment.NewLine;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="ConsoleUserIOProcessor"/> class.
     /// </summary>
@@ -42,20 +43,6 @@ public class ConsoleUserIOProcessor : IConsoleUserIOProcessor
         } while (string.IsNullOrEmpty(userInput) ||
         !int.TryParse(userInput, out number));
         return number;
-    }
-    /// <summary>
-    /// Displays the generated Sudoku boards and their solutions.
-    /// </summary>
-    /// <param name="sudokus">A collection of <see cref="Sudoku"/> objects to display.</param>
-    public void DisplaySudokuBoards(IEnumerable<Sudoku> sudokus)
-    {
-        int counter = 1;
-        _userInteractor.ShowMessage(string.Join(_separator, sudokus.Select(sudoku =>
-        {
-            return $"Sudoku number {counter++}{_separator}" +
-            $"{sudoku.SolvableBoard.ToFormattedSudokuString()}{_separator}" +
-            $"Solution: {_separator}{sudoku.Solution.ToFormattedSudokuString()}";
-        })));
     }
     /// <summary>
     /// Displays the available difficulty levels to the user.
