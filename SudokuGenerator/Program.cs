@@ -4,6 +4,7 @@ using Sudoku_Generator.UserInteraction;
 using Sudoku_Generator.Core.Validators;
 using Sudoku_Generator.Core.Solvers;
 using Sudoku_Generator.Core.Generators;
+using Serilog;
 
 namespace Sudoku_Generator;
 
@@ -11,10 +12,14 @@ public class Program
 {
     private static string solvableSudokusFileName = "sudoku.pdf";
     private static string solutionsFileName = "solutions.pdf";
+    private static string logFileName = "log.txt";
     static async Task Main()
     {
         try
         {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File(logFileName)
+                .CreateLogger();
             var pdfHandler = new SudokuPdfHandler();
             var random = new Random();
             var validator = new SudokuValidator();
@@ -42,7 +47,8 @@ public class Program
         }
         catch(Exception ex)
         {
-            Console.WriteLine($"Program has occured an unexpected error: {ex}");
+            Console.WriteLine($"Program has occured an unexpected exception and will be closed.");
+            Log.Error($"Program has occured an unexpected error: {ex}");
             throw;
         }
         Console.WriteLine("Program is finished");
