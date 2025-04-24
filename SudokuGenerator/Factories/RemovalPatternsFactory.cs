@@ -1,4 +1,5 @@
-﻿using Sudoku_Generator.Core.Models;
+﻿using Serilog;
+using Sudoku_Generator.Core.Models;
 using Sudoku_Generator.Core.RemovalPatterns;
 using Sudoku_Generator.Core.Solvers;
 
@@ -68,8 +69,19 @@ public class RemovalPatternsFactory : IRemovalPatternsFactory
     /// </exception>
     public IList<IRemovalPattern> GetRemovalPatternsFor(Difficulty difficulty)
     {
-        if (!_difficultyToRemovalMapper.TryGetValue(difficulty, out var patterns))
-            throw new ArgumentException($"No removal patterns defined for difficulty: {difficulty}");
-        return patterns;
+        try
+        {
+            if (!_difficultyToRemovalMapper.TryGetValue(difficulty, out var patterns))
+            {
+                throw new ArgumentException($"No removal patterns defined for difficulty: {difficulty}");
+            }
+
+            return patterns;
+        }
+        catch (ArgumentException ex)
+        {
+            Log.Error($"Error occured when getting removal pattern for difficulty {difficulty}");
+            throw;
+        }
     }
 }
