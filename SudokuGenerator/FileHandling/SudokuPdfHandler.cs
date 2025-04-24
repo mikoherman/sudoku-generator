@@ -6,6 +6,8 @@ using iText.IO.Font.Constants;
 using iText.Layout.Properties;
 using iText.Layout.Borders;
 using iText.Kernel.Geom;
+using iText.Kernel.Exceptions;
+using Serilog;
 
 namespace Sudoku_Generator.FileHandling;
 
@@ -30,53 +32,77 @@ public class SudokuPdfHandler : ISudokuPdfHandler
         string mainTitle,
         IEnumerable<int[,]> sudokuBoards)
     {
-        using (PdfWriter writer = new PdfWriter(filename))
-        using (PdfDocument pdf = new PdfDocument(writer))
-        using (Document document = new Document(pdf, PageSize.A4))
+        if (sudokuBoards.Any())
         {
-            // standard document margins
-            document.SetMargins(20, 20, 20, 20);
-            var standardFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-            var boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
-
-            // create main title to the document
-            // shown only at the first page
-            var paragraph = new Paragraph(mainTitle)
-                .SetFont(boldFont)
-                .SetFontSize(30)
-                .SetTextAlignment(TextAlignment.CENTER);
-
-            document.Add(paragraph);
-
-            int counter = 1;
-            var tableSideLengthInUnits =
-                UnitValue.CreatePointValue(10.5f * _cmToPointConversionMultiplier);
-            foreach (var sudokuBoard in sudokuBoards)
+            try
             {
-                var sudokuTableTitle =
-                    new Paragraph($"Number {counter}")
-                    .SetFont(boldFont)
-                    .SetFontSize(20)
-                    .SetTextAlignment(TextAlignment.CENTER)
-                    // set margin bottom to 10 to add spacing between 
-                    // title and table
-                    .SetMarginBottom(10);
-                document.Add(sudokuTableTitle);
+                using (PdfWriter writer = new PdfWriter(filename))
+                using (PdfDocument pdf = new PdfDocument(writer))
+                using (Document document = new Document(pdf, PageSize.A4))
+                {
+                    // standard document margins
+                    document.SetMargins(20, 20, 20, 20);
+                    var standardFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+                    var boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
 
-                var table =
-                    CreateTable(standardFont,
-                        sudokuBoard,
-                        tableSideLengthInUnits,
-                        tableSideLengthInUnits
-                        );
-                document.Add(table);
-                if (counter % 2 == 0 && sudokuBoard != sudokuBoards.Last())
-                    document.Add(_areaBreak);
-                counter++;
+                    // create main title to the document
+                    // shown only at the first page
+                    var paragraph = new Paragraph(mainTitle)
+                        .SetFont(boldFont)
+                        .SetFontSize(30)
+                        .SetTextAlignment(TextAlignment.CENTER);
+
+                    document.Add(paragraph);
+
+                    int counter = 1;
+                    var tableSideLengthInUnits =
+                        UnitValue.CreatePointValue(10.5f * _cmToPointConversionMultiplier);
+                    foreach (var sudokuBoard in sudokuBoards)
+                    {
+                        var sudokuTableTitle =
+                            new Paragraph($"Number {counter}")
+                            .SetFont(boldFont)
+                            .SetFontSize(20)
+                            .SetTextAlignment(TextAlignment.CENTER)
+                            // set margin bottom to 10 to add spacing between 
+                            // title and table
+                            .SetMarginBottom(10);
+                        document.Add(sudokuTableTitle);
+
+                        var table =
+                            CreateTable(standardFont,
+                                sudokuBoard,
+                                tableSideLengthInUnits,
+                                tableSideLengthInUnits
+                                );
+                        document.Add(table);
+                        if (counter % 2 == 0 && sudokuBoard != sudokuBoards.Last())
+                            document.Add(_areaBreak);
+                        counter++;
+                    }
+
+                    document.Close();
+                }
             }
-
-            document.Close();
+            // itext7 library exception
+            catch (PdfException ex)
+            {
+                Log.Error($"PDF with filename {filename}, creation error: {ex.Message}");
+                throw;
+            }
+            catch (IOException ex)
+            {
+                Log.Error($"IO exception when creating {filename}, creation error: {ex.Message}");
+                throw;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Log.Error($"Access denied for {filename}, error: {ex.Message}");
+                throw;
+            }
         }
+        else
+            Log.Information($"Provided sudoku collection for pdf creation was empty");
     }
     /// <summary>
     /// Creates a table representation of a Sudoku board for inclusion in the PDF.

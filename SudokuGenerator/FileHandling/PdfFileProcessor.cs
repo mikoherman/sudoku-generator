@@ -1,4 +1,5 @@
-﻿using Sudoku_Generator.Core.Models;
+﻿using Serilog;
+using Sudoku_Generator.Core.Models;
 using Sudoku_Generator.Events;
 
 namespace Sudoku_Generator.FileHandling;
@@ -30,20 +31,30 @@ public class PdfFileProcessor : IPdfFileProcessor, IProcessNotifier
     /// <returns>A task that represents the asynchronous operation.</returns>
     public async Task CreatePdfsFromSudokusAsync(string solvableFileName, string solutionsFileName, IEnumerable<Sudoku> sudokus)
     {
-        var tasks = new List<Task> {
-        Task.Run(() =>
-        _pdfHandler.CreatePdf(
-            solvableFileName,
-            "Sudoku",
-            sudokus.Select(sudoku => sudoku.SolvableBoard))),
-        Task.Run(() =>
-        _pdfHandler.CreatePdf(
-            solutionsFileName,
-            "Solutions",
-            sudokus.Select(sudoku => sudoku.Solution)))
-        };
-        await (Task.WhenAll(tasks)).ContinueWith(task =>
-        OnProcessFinished()); 
+        try
+        {
+            var tasks = new List<Task> {
+            Task.Run(() =>
+            _pdfHandler.CreatePdf(
+                solvableFileName,
+                "Sudoku",
+                sudokus.Select(sudoku => sudoku.SolvableBoard))),
+            Task.Run(() =>
+            _pdfHandler.CreatePdf(
+                solutionsFileName,
+                "Solutions",
+                sudokus.Select(sudoku => sudoku.Solution)))
+            };
+            await Task.WhenAll(tasks);
+        }catch(Exception ex)
+        {
+            Log.Error($"An error has occured when generating one of the PDFs: {ex}");
+            throw;
+        }
+        finally
+        {
+            OnProcessFinished();
+        }
     }
     /// <summary>
     /// Invokes the <see cref="ProcessFinished"/> event to notify that the PDF creation process is complete.
