@@ -7,4 +7,5 @@ public interface IConsoleUserIOProcessor
     void DisplaySudokuBoards(IEnumerable<Sudoku> sudokus);
     int PromptUserForNumber();
     Difficulty PromptUserForDifficulty();
+    void DisplayDifficulties();
 }

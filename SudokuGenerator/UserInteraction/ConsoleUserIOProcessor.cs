@@ -27,12 +27,21 @@ public class ConsoleUserIOProcessor : IConsoleUserIOProcessor
     public void DisplaySudokuBoards(IEnumerable<Sudoku> sudokus)
     {
         int counter = 1;
-        Console.WriteLine(string.Join(_separator, sudokus.Select(sudoku =>
+        _userInteractor.ShowMessage(string.Join(_separator, sudokus.Select(sudoku =>
         {
             return $"Sudoku number {counter++}{_separator}" +
             $"{GridExtensions.ToFormattedSudokuString(sudoku.SolvableBoard)}{_separator}" +
             $"Solution: {_separator}{GridExtensions.ToFormattedSudokuString(sudoku.Solution)}";
         })));
+    }
+
+    public void DisplayDifficulties()
+    {
+        var allDifficultiesAsString = DifficultyUtils
+            .GetAllDifficulties()
+            .Select(difficulty => $"{(int)difficulty}. {difficulty}");
+        _userInteractor.ShowMessage($"Difficulty levels:{_separator}" +
+            $"{string.Join(_separator, allDifficultiesAsString)}");
     }
     public Difficulty PromptUserForDifficulty()
     {
@@ -40,7 +49,7 @@ public class ConsoleUserIOProcessor : IConsoleUserIOProcessor
         Difficulty difficulty;
         do
         {
-            _userInteractor.ShowMessage($"Select difficulty: {_separator}");
+            _userInteractor.ShowMessage($"Choose difficulty: {_separator}");
             userInput = _userInteractor.Read();
         } while (string.IsNullOrEmpty(userInput) ||
         !int.TryParse(userInput, out int number) || 
