@@ -1,4 +1,5 @@
-﻿using Sudoku_Generator.Core.Models;
+﻿using Serilog;
+using Sudoku_Generator.Core.Models;
 using Sudoku_Generator.Core.RemovalPatterns;
 using Sudoku_Generator.Events;
 
@@ -42,22 +43,29 @@ public class SudokuGenerator : ISudokuGenerator, IProcessNotifier
     /// </returns>
     public async Task<IEnumerable<Sudoku>> GenerateBoardsAsync(int boardCount)
     {
-        var tasks = new List<Task<Sudoku>>(boardCount);
-        while (boardCount > 0)
+        try
         {
-            tasks.Add(Task.Run(() =>
+            var tasks = new List<Task<Sudoku>>(boardCount);
+            while (boardCount-- > 0)
             {
-                int[,] sudokuBoard = _boardFiller.GenerateValidSudokuGrid();
-                IRemovalPattern removalPattern = _removalPatterns[_rand.Next(_removalPatterns.Count)];
-                return removalPattern.ConvertBoardToSudoku(sudokuBoard);
-            }));
-            boardCount--;
+                tasks.Add(Task.Run(() =>
+                {
+                    int[,] sudokuBoard = _boardFiller.GenerateValidSudokuGrid();
+                    IRemovalPattern removalPattern = _removalPatterns[_rand.Next(_removalPatterns.Count)];
+                    return removalPattern.ConvertBoardToSudoku(sudokuBoard);
+                }));
+            }
+            return await Task.WhenAll(tasks);
         }
-        return await Task.WhenAll(tasks).ContinueWith(task =>
+        catch(Exception ex)
+        {
+            Log.Error($"An error has occured when generating one of the boards: {ex}");
+            throw;
+        }
+        finally
         {
             OnProcessFinished();
-            return task.Result;
-        });
+        }
     }
     /// <summary>
     /// Invokes the <see cref="ProcessFinished"/> event to notify that the generation process is complete.
