@@ -1,4 +1,5 @@
-﻿using Sudoku_Generator.Core.Models;
+﻿using Serilog;
+using Sudoku_Generator.Core.Models;
 using Sudoku_Generator.Core.Solvers;
 
 namespace Sudoku_Generator.Core.RemovalPatterns;
@@ -43,32 +44,40 @@ public class RandomRemovalPattern : IRemovalPattern
     /// </exception>
     public Sudoku ConvertBoardToSudoku(int[,] board)
     {
-        int numbersToRemove = 81 - _difficultyToCluesMapper[_difficulty];
-        IList<int> indexes = Enumerable.Range(0, 81).OrderBy(_ => _rand.Next()).ToList();
-        int[,] solution = (int[,])board.Clone();
-        foreach (int idx in indexes)
+        try
         {
-            if (numbersToRemove == 0) 
-                break;
-            int row = idx / 9;
-            int col = idx % 9;
-            int backup = board[row, col];
-            board[row, col] = 0;
+            int numbersToRemove = 81 - _difficultyToCluesMapper[_difficulty];
+            IList<int> indexes = Enumerable.Range(0, 81).OrderBy(_ => _rand.Next()).ToList();
+            int[,] solution = (int[,])board.Clone();
+            foreach (int idx in indexes)
+            {
+                if (numbersToRemove == 0)
+                    break;
+                int row = idx / 9;
+                int col = idx % 9;
+                int backup = board[row, col];
+                board[row, col] = 0;
 
-            solution = (int[,])board.Clone();
-            if (_solver.Solve(solution))
-            {
-                numbersToRemove--;
+                solution = (int[,])board.Clone();
+                if (_solver.Solve(solution))
+                {
+                    numbersToRemove--;
+                }
+                else
+                {
+                    board[row, col] = backup;
+                }
             }
-            else
+            if (numbersToRemove > 0)
             {
-                board[row, col] = backup;
+                throw new ArgumentException($"The board: {board} cannot be converted to solvable using this pattern: {nameof(RandomRemovalPattern)}, with this difficulty: {_difficulty}");
             }
+            return new Sudoku(board, solution);
         }
-        if (numbersToRemove > 0)
+        catch (ArgumentException ex)
         {
-            throw new ArgumentException($"The board: {board} cannot be converted to solvable using this pattern: {nameof(RandomRemovalPattern)}, with this difficulty: {_difficulty}");
+            Log.Error($"An error occured while converting the sudoku board. {ex}");
+            throw;
         }
-        return new Sudoku(board, solution);
     }
 }
