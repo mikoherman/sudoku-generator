@@ -7,8 +7,8 @@ namespace Sudoku_Generator.UserInteraction;
 /// </summary>
 public class LoopingStatusPrinter : ILoopingStatusPrinter
 {
-    private bool IsProcessFinished { get; set; } = false;
     private readonly IConsoleUserInteractor _userInteractor;
+    private CancellationTokenSource _cts = new();
     /// <summary>
     /// Initializes a new instance of the <see cref="LoopingStatusPrinter"/> class.
     /// </summary>
@@ -34,28 +34,36 @@ public class LoopingStatusPrinter : ILoopingStatusPrinter
             $"{messageBase} ..",
             $"{messageBase} ..."
         };
+        var token = _cts.Token;
         Task.Run(async () =>
         {
-            while (!IsProcessFinished)
+            try
             {
-                foreach (var message in messagesList)
+                while (!token.IsCancellationRequested)
                 {
-                    if (!IsProcessFinished)
+                    foreach (var message in messagesList)
                     {
+                        token.ThrowIfCancellationRequested();
                         _userInteractor.Clear();
                         _userInteractor.ShowMessage(message);
-                        await Task.Delay(delayMs);
+                        await Task.Delay(delayMs, token);
                     }
                 }
             }
-            _userInteractor.ShowMessage(messageUponCompletion);
-        });
+            catch (OperationCanceledException)
+            {
+                // TODO add logging
+            }
+        }, token)
+            .ContinueWith(task => _userInteractor.ShowMessage(messageUponCompletion));
     }
     /// <summary>
     /// Marks the process as finished and stops the looping status message.
     /// </summary>
     /// <param name="sender">The sender of the event.</param>
     /// <param name="eventArgs">The event arguments containing the process status.</param>
-    public void FinishWork(object? sender, IsProcessFinishedEventArgs eventArgs) =>
-        IsProcessFinished = eventArgs.IsProcessFinished;
+    public void FinishWork(object? sender, IsProcessFinishedEventArgs eventArgs) {
+        if (eventArgs.IsProcessFinished)
+            _cts.Cancel();
+    }
 }
