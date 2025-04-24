@@ -1,38 +1,22 @@
 ﻿namespace Sudoku_Generator.Core.Validators;
 
-//public class SudokuValidator
-//{
-//    public bool ValidateBoard(in int[,] sudokuBoard)
-//    {
-//        int[] rowsBitMask = new int[9];
-//        int[] columnsBitMask = new int[9];
-//        int[] gridBitMask = new int[9];
-//        for (int i = 0; i < 9; i++)
-//        {
-//            for (int j = 0; j < 9; j++)
-//            {
-//                if (sudokuBoard[i, j] == 0)
-//                    continue;
-//                int value = sudokuBoard[i, j];
-//                int bitPosition = 1 << (value - 1);
-//                if ((rowsBitMask[i] & bitPosition) > 0)
-//                    return false;
-//                rowsBitMask[i] |= bitPosition;
-//                if ((columnsBitMask[j] & bitPosition) > 0)
-//                    return false;
-//                columnsBitMask[j] |= bitPosition;
-//                int subGridIndex = (i/3) * 3 + (j/3);
-//                if ((gridBitMask[subGridIndex] & bitPosition) > 0)
-//                    return false;
-//                gridBitMask[subGridIndex] |= bitPosition;
-//            }
-//        }
-//        return true;
-//    }
-//}
-
+/// <summary>
+/// Provides functionality to validate Sudoku boards and ensure they adhere to Sudoku rules.
+/// </summary>
 public class SudokuValidator : ISudokuValidator
 {
+    /// <summary>
+    /// Validates whether the value at the specified row and column in the Sudoku board
+    /// adheres to Sudoku rules (row, column, and 3x3 grid uniqueness).
+    /// Designed to iterate over current row, column and 3x3 grid in one loop.
+    /// </summary>
+    /// <param name="row">The row index of the value to validate.</param>
+    /// <param name="col">The column index of the value to validate.</param>
+    /// <param name="board">The Sudoku board represented as a 2D array.</param>
+    /// <returns>
+    /// <c>true</c> if the value at the specified position is valid according to Sudoku rules;
+    /// otherwise, <c>false</c>.
+    /// </returns>
     public bool Validate(int row, int col, in int[,] board)
     {
         int valueToCheck = board[row, col];
@@ -48,7 +32,7 @@ public class SudokuValidator : ISudokuValidator
                 return false;
             if (i != row && board[i, col] == valueToCheck)
                 return false;
-            // go to next row when 3x3 grid collumn end is reached
+            // calculate 3x3 current iteration
             boxColCurrent = boxColStartPoint + i % 3;
             boxRowCurrent = boxRowStartPoint + i / 3;
             if (!(boxColCurrent == col && boxRowCurrent == row) &&

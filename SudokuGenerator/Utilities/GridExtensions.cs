@@ -2,8 +2,16 @@
 
 namespace Sudoku_Generator.Utilities;
 
+/// <summary>
+/// Provides extension methods for working with Sudoku grids.
+/// </summary>
 public static class GridExtensions
 {
+    /// <summary>
+    /// Converts a 9x9 Sudoku grid into a formatted string representation.
+    /// </summary>
+    /// <param name="board">The 9x9 Sudoku grid to format.</param>
+    /// <returns>A formatted string representation of the Sudoku grid.</returns>
     public static string ToFormattedSudokuString(this int[,] board)
     {
         var sb = new StringBuilder();
@@ -23,5 +31,3 @@ public static class GridExtensions
         return sb.ToString();
     }
 }
-
-

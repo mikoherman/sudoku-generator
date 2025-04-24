@@ -1,5 +1,8 @@
 ﻿namespace Sudoku_Generator.Events;
 
+/// <summary>
+/// Defines the contract for notifying when a process has finished.
+/// </summary>
 public interface IProcessNotifier
 {
     /// <summary>

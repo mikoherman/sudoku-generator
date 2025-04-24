@@ -3,6 +3,10 @@ using Sudoku_Generator.Core.Solvers;
 
 namespace Sudoku_Generator.Core.RemovalPatterns;
 
+/// <summary>
+/// Implements a random removal pattern for generating Sudoku puzzles
+/// by removing numbers from a fully solved board based on the specified difficulty.
+/// </summary>
 public class RandomRemovalPattern : IRemovalPattern
 {
     private readonly ISudokuSolver _solver;
@@ -14,13 +18,29 @@ public class RandomRemovalPattern : IRemovalPattern
         [Difficulty.Medium] = 35,
         [Difficulty.Hard] = 30
     };
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RandomRemovalPattern"/> class.
+    /// </summary>
+    /// <param name="solver">An instance of <see cref="ISudokuSolver"/> to validate board solvability.</param>
+    /// <param name="rand">A random number generator for selecting cells to remove.</param>
+    /// <param name="difficulty">The difficulty level for the Sudoku puzzle.</param>
     public RandomRemovalPattern(ISudokuSolver solver, Random rand, Difficulty difficulty)
     {
         _solver = solver;
         _rand = rand;
         _difficulty = difficulty;
     }
-
+    /// <summary>
+    /// Converts a fully solved Sudoku board into a puzzle by removing numbers
+    /// based on the specified difficulty level.
+    /// </summary>
+    /// <param name="board">The fully solved Sudoku board represented as a 9x9 2D array.</param>
+    /// <returns>
+    /// A <see cref="Sudoku"/> object containing the puzzle board and its solution.
+    /// </returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown if the board cannot be converted into a solvable puzzle using this pattern.
+    /// </exception>
     public Sudoku ConvertBoardToSudoku(int[,] board)
     {
         int numbersToRemove = 81 - _difficultyToCluesMapper[_difficulty];
