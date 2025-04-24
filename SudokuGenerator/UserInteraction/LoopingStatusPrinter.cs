@@ -1,5 +1,4 @@
-﻿using SudokuGenerator.UserInteraction;
-using Sudoku_Generator.Events;
+﻿using Sudoku_Generator.Events;
 
 namespace Sudoku_Generator.UserInteraction;
 

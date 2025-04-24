@@ -1,5 +1,5 @@
-﻿using Sudoku_Generator.Events;
-using SudokuGenerator.Models;
+﻿using Sudoku_Generator.Core.Models;
+using Sudoku_Generator.Events;
 
 namespace Sudoku_Generator.FileHandling;
 

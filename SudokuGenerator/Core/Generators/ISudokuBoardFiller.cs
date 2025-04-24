@@ -1,4 +1,4 @@
-﻿namespace SudokuGenerator.Generators;
+﻿namespace Sudoku_Generator.Core.Generators;
 
 public interface ISudokuBoardFiller
 {

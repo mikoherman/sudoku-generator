@@ -1,8 +1,8 @@
-﻿using Sudoku_Generator.Events;
-using SudokuGenerator.Models;
-using SudokuGenerator.RemovalPatterns;
+﻿using Sudoku_Generator.Core.Models;
+using Sudoku_Generator.Core.RemovalPatterns;
+using Sudoku_Generator.Events;
 
-namespace SudokuGenerator.Generators;
+namespace Sudoku_Generator.Core.Generators;
 
 public class SudokuGenerator : ISudokuGenerator, IProcessNotifier
 {
@@ -32,7 +32,7 @@ public class SudokuGenerator : ISudokuGenerator, IProcessNotifier
             }));
             boardCount--;
         }
-        return await (Task.WhenAll(tasks)).ContinueWith(task =>
+        return await Task.WhenAll(tasks).ContinueWith(task =>
         {
             OnProcessFinished();
             return task.Result;

@@ -1,4 +1,4 @@
-﻿namespace SudokuGenerator.UserInteraction;
+﻿namespace Sudoku_Generator.UserInteraction;
 
 public class ConsoleUserInteractor : IConsoleUserInteractor
 {

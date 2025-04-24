@@ -1,6 +1,6 @@
-﻿using SudokuGenerator.Models;
+﻿using Sudoku_Generator.Core.Models;
 
-namespace SudokuGenerator.RemovalPatterns;
+namespace Sudoku_Generator.Core.RemovalPatterns;
 
 public class CheckboardPatternRemoval : IRemovalPattern
 {

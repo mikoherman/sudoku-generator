@@ -1,10 +1,10 @@
-﻿using SudokuGenerator.Models;
-using SudokuGenerator.UserInteraction;
-using SudokuGenerator.Generators;
-using Sudoku_Generator.Factories;
+﻿using Sudoku_Generator.Factories;
 using Sudoku_Generator.FileHandling;
+using Sudoku_Generator.Core.Generators;
+using Sudoku_Generator.Core.Models;
+using Sudoku_Generator.UserInteraction;
 
-namespace SudokuGenerator;
+namespace Sudoku_Generator;
 
 public class SudokuGeneratorApp
 {

@@ -1,6 +1,6 @@
-﻿using SudokuGenerator.Validators;
+﻿using Sudoku_Generator.Core.Validators;
 
-namespace SudokuGenerator.Solvers;
+namespace Sudoku_Generator.Core.Solvers;
 
 public class SudokuSolver : ISudokuSolver
 {

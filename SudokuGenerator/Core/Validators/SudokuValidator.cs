@@ -1,4 +1,4 @@
-﻿namespace SudokuGenerator.Validators;
+﻿namespace Sudoku_Generator.Core.Validators;
 
 //public class SudokuValidator
 //{

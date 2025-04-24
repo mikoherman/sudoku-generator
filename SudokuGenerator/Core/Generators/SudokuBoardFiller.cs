@@ -1,6 +1,6 @@
-﻿using SudokuGenerator.Solvers;
+﻿using Sudoku_Generator.Core.Solvers;
 
-namespace SudokuGenerator.Generators;
+namespace Sudoku_Generator.Core.Generators;
 
 public class SudokuBoardFiller : ISudokuBoardFiller
 {

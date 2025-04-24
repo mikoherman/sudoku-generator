@@ -1,4 +1,4 @@
-﻿namespace SudokuGenerator.Models;
+﻿namespace Sudoku_Generator.Core.Models;
 
 public enum Difficulty
 {

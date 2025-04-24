@@ -1,8 +1,7 @@
-﻿using Sudoku_Generator.UserInteraction;
+﻿using Sudoku_Generator.Core.Models;
 using Sudoku_Generator.Utilities;
-using SudokuGenerator.Models;
 
-namespace SudokuGenerator.UserInteraction;
+namespace Sudoku_Generator.UserInteraction;
 
 public class ConsoleUserIOProcessor : IConsoleUserIOProcessor
 {
@@ -37,8 +36,8 @@ public class ConsoleUserIOProcessor : IConsoleUserIOProcessor
         _userInteractor.ShowMessage(string.Join(_separator, sudokus.Select(sudoku =>
         {
             return $"Sudoku number {counter++}{_separator}" +
-            $"{GridExtensions.ToFormattedSudokuString(sudoku.SolvableBoard)}{_separator}" +
-            $"Solution: {_separator}{GridExtensions.ToFormattedSudokuString(sudoku.Solution)}";
+            $"{sudoku.SolvableBoard.ToFormattedSudokuString()}{_separator}" +
+            $"Solution: {_separator}{sudoku.Solution.ToFormattedSudokuString()}";
         })));
     }
 

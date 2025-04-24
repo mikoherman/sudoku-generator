@@ -1,18 +1,17 @@
-﻿using SudokuGenerator.Solvers;
-using SudokuGenerator.UserInteraction;
-using SudokuGenerator.Validators;
-using SudokuGenerator.Generators;
-using Sudoku_Generator.Factories;
+﻿using Sudoku_Generator.Factories;
 using Sudoku_Generator.FileHandling;
 using Sudoku_Generator.UserInteraction;
+using Sudoku_Generator.Core.Validators;
+using Sudoku_Generator.Core.Solvers;
+using Sudoku_Generator.Core.Generators;
 
-namespace SudokuGenerator;
+namespace Sudoku_Generator;
 
 public class Program
 {
     private static string solvableSudokusFileName = "sudoku.pdf";
     private static string solutionsFileName = "solutions.pdf";
-    static async Task Main(string[] args)
+    static async Task Main()
     {
         try
         {

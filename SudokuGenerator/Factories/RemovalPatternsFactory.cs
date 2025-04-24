@@ -1,6 +1,7 @@
-﻿using SudokuGenerator.Models;
+﻿using Sudoku_Generator.Core.Models;
+using Sudoku_Generator.Core.RemovalPatterns;
+using Sudoku_Generator.Core.Solvers;
 using SudokuGenerator.RemovalPatterns;
-using SudokuGenerator.Solvers;
 
 namespace Sudoku_Generator.Factories;
 

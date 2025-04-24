@@ -1,5 +1,5 @@
-﻿using SudokuGenerator.Generators;
-using SudokuGenerator.Models;
+﻿using Sudoku_Generator.Core.Generators;
+using Sudoku_Generator.Core.Models;
 
 namespace Sudoku_Generator.Factories;
 

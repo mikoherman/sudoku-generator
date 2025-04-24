@@ -1,7 +1,7 @@
-﻿using SudokuGenerator.Models;
-using SudokuGenerator.Solvers;
+﻿using Sudoku_Generator.Core.Models;
+using Sudoku_Generator.Core.Solvers;
 
-namespace SudokuGenerator.RemovalPatterns;
+namespace Sudoku_Generator.Core.RemovalPatterns;
 
 public class RandomRemovalPattern : IRemovalPattern
 {

@@ -1,4 +1,4 @@
-﻿namespace SudokuGenerator.Solvers;
+﻿namespace Sudoku_Generator.Core.Solvers;
 
 public interface ISudokuSolver
 {

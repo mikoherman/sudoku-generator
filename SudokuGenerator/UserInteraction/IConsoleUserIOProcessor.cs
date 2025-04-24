@@ -1,6 +1,6 @@
-﻿using SudokuGenerator.Models;
+﻿using Sudoku_Generator.Core.Models;
 
-namespace SudokuGenerator.UserInteraction;
+namespace Sudoku_Generator.UserInteraction;
 
 public interface IConsoleUserIOProcessor
 {

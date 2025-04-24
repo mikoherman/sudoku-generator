@@ -1,8 +1,8 @@
-﻿using SudokuGenerator.Models;
-using SudokuGenerator.RemovalPatterns;
-using Generators = SudokuGenerator.Generators;
-using SudokuGenerator.Generators;
-using Sudoku_Generator.UserInteraction;
+﻿using Sudoku_Generator.UserInteraction;
+using Generators = Sudoku_Generator.Core.Generators;
+using Sudoku_Generator.Core.RemovalPatterns;
+using Sudoku_Generator.Core.Models;
+using Sudoku_Generator.Core.Generators;
 
 namespace Sudoku_Generator.Factories;
 

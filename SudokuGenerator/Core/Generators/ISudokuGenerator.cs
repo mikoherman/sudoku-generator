@@ -1,6 +1,6 @@
-﻿using SudokuGenerator.Models;
+﻿using Sudoku_Generator.Core.Models;
 
-namespace SudokuGenerator.Generators;
+namespace Sudoku_Generator.Core.Generators;
 
 public interface ISudokuGenerator
 {
