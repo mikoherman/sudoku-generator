@@ -41,7 +41,8 @@ public class ConsoleUserIOProcessor : IConsoleUserIOProcessor
             _userInteractor.ShowMessage($"Please input number of sudoku boards to generate:");
             userInput = _userInteractor.Read();
         } while (string.IsNullOrEmpty(userInput) ||
-        !int.TryParse(userInput, out number));
+        !int.TryParse(userInput, out number) || 
+        number <= 0);
         return number;
     }
     /// <summary>
