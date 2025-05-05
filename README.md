@@ -26,6 +26,8 @@ solving them, and exporting both the puzzles and their solutions as PDF files.
 - Implementation of a **backtracking algorithm** to solve Sudoku puzzles
 - **Event-driven design** to decouple components and improve modularity
 - Clean project structure with strong **separation of concerns**, organized by feature in dedicated directories
+- Thorough unit testing using the NUnit testing framework, ensuring high code reliability and regression safety
+- Use of Moq to isolate dependencies and simulate external behavior in unit tests
 - Descriptive, atomic **Git commits** on isolated feature branches for clear version control
 - Thorough **XML documentation** to support maintainability and IDE tooling
 
@@ -35,6 +37,7 @@ solving them, and exporting both the puzzles and their solutions as PDF files.
 
 - [Serilog](https://serilog.net/) - For structured logging, enabling easier debugging and improving maintainability.
 - [IText7](https://itextpdf.com/) - For robust PDF exporting
+- NUnit and Moq - Used together to write isolated, repeatable unit tests by simulating external dependencies and asserting expected behavior
 
 ---
 
@@ -51,6 +54,13 @@ solving them, and exporting both the puzzles and their solutions as PDF files.
    - `solutions.txt` – containing the solutions
 6. A second progress status thread reports the PDF generation process until completion::<br><br>
 ![Pdf generation status message](https://github.com/user-attachments/assets/3838bd71-a071-41ac-b9c6-9b4e079c4aa4)
+7. Two PDF files were generated:<br><br>
+![Pdf files in bin directory](https://github.com/user-attachments/assets/f36a5385-73a7-44ad-8d96-16dfd3b0c257)
+- One with Sudoku boards to solve:<br><br>
+![Pdf result with solvable Sudoku boards](https://github.com/user-attachments/assets/5d898424-5453-482a-a3e3-6cbec205e0e4)
+- Second with solutions to them:<br><br>
+![Pdf result with Sudoku solutions](https://github.com/user-attachments/assets/8ce29504-a748-43fb-88d9-d1048222066a)
+
 
 ## Installation
 
